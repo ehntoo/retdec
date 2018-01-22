@@ -1,0 +1,56 @@
+language: cpp
+
+matrix:
+  fast_finish: true
+  include:
+    - os: linux
+      dist: trusty
+      compiler: gcc-4.9
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - build-essential
+            - gcc-4.9
+            - g++-4.9
+            - cmake
+            - perl
+            - python3
+            - flex
+            - bison
+            - autoconf
+            - automake
+            - libtool
+            - pkg-config
+            - m4
+            - coreutils
+            - zlib1g-dev
+            - libtinfo-dev
+            - wget
+            - bc
+            - upx
+            - doxygen
+            - graphviz
+      env:
+        - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9 && NPROC=$(nproc)"
+    - os: osx
+      osx_image: xcode8.3
+      env:
+        - MATRIX_EVAL="NPROC=$(sysctl -n hw.physicalcpu)"
+
+before_script:
+  - eval "${MATRIX_EVAL}"
+
+script:
+  - mkdir build && cd build
+  - cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$(pwd)/install" -DRETDEC_TESTS=ON -DRETDEC_DEV_TOOLS=ON ..
+  - time make llvm-project -j $NPROC
+
+branches:
+  only:
+    - travis-ci-test
+
+notifications:
+  email:
+    on_success: never
