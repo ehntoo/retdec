@@ -33,20 +33,23 @@ matrix:
             - upx
             - doxygen
             - graphviz
+#
+            - libc++1
+            - libc++abi1
       env:
 #        - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9 && NPROC=$(nproc)"
         - MATRIX_EVAL="NPROC=$(nproc)"
-    - os: osx
-      osx_image: xcode8.3
-      env:
-        - MATRIX_EVAL="NPROC=$(sysctl -n hw.physicalcpu)"
+#    - os: osx
+#      osx_image: xcode8.3
+#      env:
+#        - MATRIX_EVAL="NPROC=$(sysctl -n hw.physicalcpu)"
 
 before_script:
   - eval "${MATRIX_EVAL}"
 
 script:
   - mkdir build && cd build
-  - cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$(pwd)/install" -DRETDEC_TESTS=ON -DRETDEC_DEV_TOOLS=ON ..
+  - cmake -DCMAKE_CXX_FLAGS="-stdlib=libc++" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$(pwd)/install" -DRETDEC_TESTS=ON -DRETDEC_DEV_TOOLS=ON ..
   - time make retdec-utils -j $NPROC
 
 branches:
