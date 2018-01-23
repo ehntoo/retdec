@@ -5,9 +5,9 @@ matrix:
   include:
     - os: linux
       dist: trusty
-      compiler: gcc-4.9
+#      compiler: gcc-4.9
 #      compiler: clang
-#      compiler: clang-5.0
+      compiler: clang-5.0
       addons:
         apt:
           sources:
@@ -15,8 +15,8 @@ matrix:
             - llvm-toolchain-trusty-5.0
           packages:
             - build-essential
-            - gcc-4.9
-            - g++-4.9
+#            - gcc-4.9
+#            - g++-4.9
             - cmake
             - perl
             - python3
@@ -39,10 +39,10 @@ matrix:
 #
 #            - libc++1
 #            - libc++abi1
-#            - clang-5.0
+            - clang-5.0
       env:
-        - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9 && NPROC=$(nproc)"
-#        - MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0 && NPROC=$(nproc)"
+#        - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9 && NPROC=$(nproc)"
+        - MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0 && NPROC=$(nproc)"
 #    - os: osx
 #      osx_image: xcode8.3
 #      env:
@@ -55,7 +55,7 @@ script:
   - mkdir build && cd build
 #  - cmake -DCMAKE_CXX_FLAGS="-stdlib=libc++" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$(pwd)/install" -DRETDEC_TESTS=ON -DRETDEC_DEV_TOOLS=ON ..
   - cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$(pwd)/install" -DRETDEC_TESTS=ON -DRETDEC_DEV_TOOLS=ON ..
-  - time make llvm-project -j $NPROC
+  - time make retdec-utils -j $NPROC
 
 branches:
   only:
