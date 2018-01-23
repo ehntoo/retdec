@@ -6,11 +6,13 @@ matrix:
     - os: linux
       dist: trusty
 #      compiler: gcc-4.9
-      compiler: clang
+#      compiler: clang
+      compiler: clang-5.0
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
+            - llvm-toolchain-trusty-5.0
           packages:
             - build-essential
 #            - gcc-4.9
@@ -33,12 +35,14 @@ matrix:
             - upx
             - doxygen
             - graphviz
+            - openssl
 #
-            - libc++1
-            - libc++abi1
+#            - libc++1
+#            - libc++abi1
+            - clang-5.0
       env:
 #        - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9 && NPROC=$(nproc)"
-        - MATRIX_EVAL="NPROC=$(nproc)"
+        - MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0 && NPROC=$(nproc)"
 #    - os: osx
 #      osx_image: xcode8.3
 #      env:
@@ -48,8 +52,10 @@ before_script:
   - eval "${MATRIX_EVAL}"
 
 script:
+  - echo "===============================> $NPROC"
   - mkdir build && cd build
-  - cmake -DCMAKE_CXX_FLAGS="-stdlib=libc++" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$(pwd)/install" -DRETDEC_TESTS=ON -DRETDEC_DEV_TOOLS=ON ..
+#  - cmake -DCMAKE_CXX_FLAGS="-stdlib=libc++" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$(pwd)/install" -DRETDEC_TESTS=ON -DRETDEC_DEV_TOOLS=ON ..
+  - cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$(pwd)/install" -DRETDEC_TESTS=ON -DRETDEC_DEV_TOOLS=ON ..
   - time make llvm-project -j $NPROC
 
 branches:
