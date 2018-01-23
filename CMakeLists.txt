@@ -14,9 +14,6 @@ option(RETDEC_DEV_TOOLS "Build dev tools." OFF)
 
 set(CMAKE_CXX_STANDARD 14)
 
-# To reduce build times.
-set(CMAKE_CXX_FLAGS_RELEASE "-O0")
-
 # On Linux and macOS, set RPATH relative to the origin of the installed
 # executables (i.e. relative to the bin directory). This allows us to move the
 # installation directory into a different location after installation, which is

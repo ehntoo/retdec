@@ -36,7 +36,7 @@ endif()
 
 ExternalProject_Add(llvm-project
 #	SOURCE_DIR /home/peter/retdec-github/llvm
-	URL https://github.com/avast-tl/llvm/archive/ea2e5ded0a2ce31cbb52b32cd93446cbd2e7c8cc.zip
+	URL https://github.com/avast-tl/llvm/archive/b57ad662470876d605ffb3556e47dffecd66ece9.zip
 #	URL_HASH SHA256=d30752a7cd23597cf54513b6ea69fa8c1311c631bd7bbfc816737249664443e9
 #	DOWNLOAD_NAME llvm.zip
 	CMAKE_ARGS
@@ -79,7 +79,7 @@ ExternalProject_Add(llvm-project
 		-DLLVM_BUILD_TOOLS=OFF
 		-DLLVM_BUILD_UTILS=OFF
 		-DLLVM_BUILD_RUNTIME=OFF
-		
+
 		# Force the use of the same compiler as used to build the top-level
 		# project. Otherwise, the external project may pick up a different
 		# compiler, which may result in link errors.
@@ -120,11 +120,11 @@ set(LLVM_LIB_LIST
 	LLVMBitWriter
 	LLVMIRReader
 	LLVMObject
+	LLVMInstCombine
 	LLVMSupport
 	LLVMipo
 	LLVMAsmParser
 	LLVMBitReader
-	LLVMVectorize
 	LLVMMCParser
 	LLVMCodeGen
 	LLVMScalarOpts
@@ -134,11 +134,7 @@ set(LLVM_LIB_LIST
 	LLVMCore
 	LLVMMC
 	LLVMObject
-	LLVMProfileData
 	LLVMPasses
-	LLVMLinker
-	LLVMInstCombine
-	LLVMSupport
 )
 
 if(MSVC)
