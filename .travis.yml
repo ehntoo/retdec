@@ -5,15 +5,16 @@ matrix:
   include:
     - os: linux
       dist: trusty
-      compiler: gcc-4.9
+#      compiler: gcc-4.9
+      compiler: clang
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
           packages:
             - build-essential
-            - gcc-4.9
-            - g++-4.9
+#            - gcc-4.9
+#            - g++-4.9
             - cmake
             - perl
             - python3
@@ -33,7 +34,8 @@ matrix:
             - doxygen
             - graphviz
       env:
-        - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9 && NPROC=$(nproc)"
+#        - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9 && NPROC=$(nproc)"
+        - MATRIX_EVAL="NPROC=$(nproc)"
     - os: osx
       osx_image: xcode8.3
       env:
@@ -45,11 +47,11 @@ before_script:
 script:
   - mkdir build && cd build
   - cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$(pwd)/install" -DRETDEC_TESTS=ON -DRETDEC_DEV_TOOLS=ON ..
-  - time make llvm-project -j $NPROC
+  - time make retdec-utils -j $NPROC
 
 branches:
   only:
-    - travis-ci-test
+    - travis-ci-test-clang
 
 notifications:
   email:
