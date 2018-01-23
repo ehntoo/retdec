@@ -50,7 +50,7 @@ before_script:
 script:
   - mkdir build && cd build
   - cmake -DCMAKE_CXX_FLAGS="-stdlib=libc++" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$(pwd)/install" -DRETDEC_TESTS=ON -DRETDEC_DEV_TOOLS=ON ..
-  - time make retdec-utils -j $NPROC
+  - time make llvm-project -j $NPROC
 
 branches:
   only:
