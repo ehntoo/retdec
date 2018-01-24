@@ -31,8 +31,6 @@ matrix:
             - wget
             - bc
             - upx
-            - doxygen
-            - graphviz
             - openssl
       env:
         - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9 && NPROC=$(nproc)"
