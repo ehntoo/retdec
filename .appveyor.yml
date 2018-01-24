@@ -13,6 +13,8 @@ install:
   - appveyor DownloadFile "https://downloads.sourceforge.net/project/winflexbison/%WINFLEXBISON_ARCHIVE%"
   - 7z x -y -owinflexbison\ "%WINFLEXBISON_ARCHIVE%" > nul
   - set Path=%CD%\winflexbison;%Path%
+  - C:\msys64\usr\bin\pacman --needed -Sy --noconfirm bash pacman pacman-mirrors msys2-runtime tar upx bc wget
+  - C:\msys64\usr\bin\pacman -Syu --noconfirm
 
 before_build:
   - cmd: mkdir build
