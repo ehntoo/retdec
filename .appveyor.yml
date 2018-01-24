@@ -1,0 +1,33 @@
+version: '{build}'
+
+environment:
+  WINFLEXBISON_ARCHIVE: win_flex_bison-2.5.14.zip
+  matrix:
+    - CMAKE_GENERATOR: Visual Studio 14 2015 Win64
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+
+matrix:
+  fast_finish: true
+
+install:
+  - appveyor DownloadFile "https://downloads.sourceforge.net/project/winflexbison/%WINFLEXBISON_ARCHIVE%"
+  - 7z x -y -owinflexbison\ "%WINFLEXBISON_ARCHIVE%" > nul
+  - set Path=%CD%\winflexbison;%Path%
+
+before_build:
+  - cmd: mkdir build
+  - cmd: cd build
+  - cmd: cmake -DCMAKE_CXX_FLAGS_RELEASE="/Od -DNDEBUG" -G"%CMAKE_GENERATOR%" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="%APPVEYOR_BUILD_FOLDER%\install" ..
+
+build_script:
+  - cmd: cmake --build . --config Release -- /m
+  - cmd: cmake --build . --config Release --target install
+  - cmd: %APPVEYOR_BUILD_FOLDER%\install\bin\retdec-tests-runner.sh
+
+notifications:
+  - provider: Email
+    to:
+      - '{{commitAuthorEmail}}'
+    on_build_success: false
+    on_build_failure: true
+    on_build_status_changed: true
