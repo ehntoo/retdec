@@ -15,6 +15,7 @@ install:
   - set Path=%CD%\winflexbison;%Path%
   - C:\msys64\usr\bin\pacman --needed -Sy --noconfirm bash pacman pacman-mirrors msys2-runtime tar upx bc wget
   - C:\msys64\usr\bin\pacman -Syu --noconfirm
+  - set Path=C:\msys64\usr\bin;C:\msys64\mingw64\bin;%Path%
 
 before_build:
   - cmd: mkdir build
@@ -27,7 +28,7 @@ build_script:
 
 test_script:
   - cmd: install\bin\retdec-tests-bin2llvmir
-  - cmd: install\bin\retdec-tests-runner.sh
+  - cmd: bash install\bin\retdec-tests-runner.sh
 
 notifications:
   - provider: Email
