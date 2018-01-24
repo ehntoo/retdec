@@ -19,11 +19,13 @@ before_build:
   - cmd: cd build
   - cmd: cmake -DCMAKE_CXX_FLAGS_RELEASE="/Od -DNDEBUG" -G"%CMAKE_GENERATOR%" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="%APPVEYOR_BUILD_FOLDER%\install" ..
 
-
 build_script:
   - cmd: cmake --build . --config Release -- /m
   - cmd: cmake --build . --config Release --target install
-  - cmd: %APPVEYOR_BUILD_FOLDER%\install\bin\retdec-tests-runner.sh
+
+test_script:
+  - cmd: install\bin\retdec-tests-bin2llvmir
+  - cmd: install\bin\retdec-tests-runner.sh
 
 notifications:
   - provider: Email
