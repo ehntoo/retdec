@@ -12,6 +12,7 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - build-essential
+            - gcc-4.8-multilib
             - gcc-4.9
             - g++-4.9
             - cmake

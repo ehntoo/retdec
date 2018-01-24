@@ -35,10 +35,9 @@ if(NOT PYTHON_EXECUTABLE)
 endif()
 
 ExternalProject_Add(llvm-project
-#	SOURCE_DIR /home/peter/retdec-github/llvm
 	URL https://github.com/avast-tl/llvm/archive/b57ad662470876d605ffb3556e47dffecd66ece9.zip
-#	URL_HASH SHA256=d30752a7cd23597cf54513b6ea69fa8c1311c631bd7bbfc816737249664443e9
-#	DOWNLOAD_NAME llvm.zip
+	URL_HASH SHA256=b61bddbb90977d86ca48838465d1e41f42d18b58e3d84dcefd5c4f88efe99f70
+	DOWNLOAD_NAME llvm.zip
 	CMAKE_ARGS
 		# Force a release build (we don't need to debug LLVM).
 		# This has no effect on Windows with MSVC, but is useful on Linux.
