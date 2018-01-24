@@ -35,7 +35,7 @@ matrix:
             - upx
             - openssl
       env:
-        - MATRIX_EVAL="CC=\"ccache gcc-4.9\" && CXX=\"ccache g++-4.9\" && NPROC=$(nproc)"
+        - MATRIX_EVAL="CC='ccache gcc-4.9' && CXX='ccache g++-4.9' && NPROC=$(nproc)"
 
     - os: osx
       osx_image: xcode8.3
