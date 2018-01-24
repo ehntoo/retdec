@@ -14,7 +14,7 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - build-essential
-#            - gcc-4.8-multilib
+            - gcc-4.8-multilib
             - gcc-4.9
             - g++-4.9
             - cmake
@@ -36,6 +36,8 @@ matrix:
             - openssl
       env:
         - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9 && NPROC=$(nproc)"
+        # We need this so that ccache does not cause compilation errors.
+        # e.g. retdec/tests/utils/string_tests.cpp:276:2: error: stray '\' in program
         - CCACHE_CPP2=true
 
     - os: osx
@@ -51,23 +53,22 @@ script:
   # We use "-O0" to speed-up build.
   # "-O0" causes segfaults in LLVM if we do not use "-DNDEBUG" as well.
   - cmake -DCMAKE_CXX_FLAGS_RELEASE="-O0 -DNDEBUG" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$(pwd)/install" -DRETDEC_TESTS=ON -DRETDEC_DEV_TOOLS=ON ..
-  - time make retdec-tests-utils -j $NPROC
-  #- time make install -j $NPROC
-  ## Test that install is movable and that it does not need build directory.
-  #- mv install ../retdec-install
-  #- cd ..
-  #- rm -rf build
-  ## Run unit tests.
-  #- ./retdec-install/bin/retdec-tests-runner.sh
-  ## Run decompilation script.
-  #- ./retdec-install/bin/retdec-decompiler.sh --help
-  ## Run simple decompilation.
-  #- echo -e '#include <stdio.h>\n#include <stdlib.h>\nint main()\n{\n  printf("hello world\\n");\n  return 0;\n}\n' > hello-orig.c
-  #- cat hello-orig.c
-  #- gcc -m32 -o hello hello-orig.c
-  #- ./hello
-  #- ./retdec-install/bin/retdec-decompiler.sh hello
-  #- cat hello.c
+  - time make install -j $NPROC
+  # Test that install is movable and that it does not need build directory.
+  - mv install ../retdec-install
+  - cd ..
+  - rm -rf build
+  # Run unit tests.
+  - ./retdec-install/bin/retdec-tests-runner.sh
+  # Run decompilation script.
+  - ./retdec-install/bin/retdec-decompiler.sh --help
+  # Run simple decompilation.
+  - echo -e '#include <stdio.h>\n#include <stdlib.h>\nint main()\n{\n  printf("hello world\\n");\n  return 0;\n}\n' > hello-orig.c
+  - cat hello-orig.c
+  - gcc -m32 -o hello hello-orig.c
+  - ./hello
+  - ./retdec-install/bin/retdec-decompiler.sh hello
+  - cat hello.c
 
 branches:
   only:
