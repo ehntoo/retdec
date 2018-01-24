@@ -19,6 +19,7 @@ before_build:
   - cmd: cd build
   - cmd: cmake -DCMAKE_CXX_FLAGS_RELEASE="/Od -DNDEBUG" -G"%CMAKE_GENERATOR%" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="%APPVEYOR_BUILD_FOLDER%\install" ..
 
+
 build_script:
   - cmd: cmake --build . --config Release -- /m
   - cmd: cmake --build . --config Release --target install
