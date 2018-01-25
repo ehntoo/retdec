@@ -5,40 +5,40 @@ cache: ccache
 matrix:
   fast_finish: true
   include:
-    - os: linux
-      dist: trusty
-      compiler: gcc-4.9
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - build-essential
-            - gcc-4.8-multilib
-            - gcc-4.9
-            - g++-4.9
-            - cmake
-            - perl
-            - python3
-            - flex
-            - bison
-            - autoconf
-            - automake
-            - libtool
-            - pkg-config
-            - m4
-            - coreutils
-            - zlib1g-dev
-            - libtinfo-dev
-            - wget
-            - bc
-            - upx
-            - openssl
-      env:
-        - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9 && NPROC=$(nproc)"
-        # We need this so that ccache does not cause compilation errors.
-        # e.g. retdec/tests/utils/string_tests.cpp:276:2: error: stray '\' in program
-        - CCACHE_CPP2=true
+    #- os: linux
+      #dist: trusty
+      #compiler: gcc-4.9
+      #addons:
+        #apt:
+          #sources:
+            #- ubuntu-toolchain-r-test
+          #packages:
+            #- build-essential
+            #- gcc-4.8-multilib
+            #- gcc-4.9
+            #- g++-4.9
+            #- cmake
+            #- perl
+            #- python3
+            #- flex
+            #- bison
+            #- autoconf
+            #- automake
+            #- libtool
+            #- pkg-config
+            #- m4
+            #- coreutils
+            #- zlib1g-dev
+            #- libtinfo-dev
+            #- wget
+            #- bc
+            #- upx
+            #- openssl
+      #env:
+        #- MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9 && NPROC=$(nproc)"
+        ## We need this so that ccache does not cause compilation errors.
+        ## e.g. retdec/tests/utils/string_tests.cpp:276:2: error: stray '\' in program
+        #- CCACHE_CPP2=true
 
     - os: osx
       osx_image: xcode8.3
@@ -51,6 +51,8 @@ install:
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install flex bison; fi
   # ccache is not installed on OS X.
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install ccache; fi
+  # Contains sha256sum, readlink, etc.
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install coreutils gnu-getopt; fi
 
 before_script:
   - eval "${MATRIX_EVAL}"
@@ -58,10 +60,18 @@ before_script:
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then export CMAKE_INCLUDE_PATH="/usr/local/opt/flex/include"; fi
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then export CMAKE_LIBRARY_PATH="/usr/local/opt/flex/lib;/usr/local/opt/bison/lib"; fi
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then export PATH="/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH"; fi
+  # Coreutils.
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then export PATH="$(brew --prefix coreutils)/libexec/gnubin:$PATH"; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then ln -s /usr/local/bin/greadlink /usr/local/bin/readlink; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then export PATH="/usr/local/opt/gnu-getopt/bin/:$PATH"; fi
   # We need to add ccache before everything else in PATH.
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then export PATH="/usr/local/opt/ccache/libexec:$PATH"; fi
 
 script:
+  #
+  - echo "================================ BASH -v"
+  - bash --version
+  #
   - mkdir build && cd build
   # We use "-O0" to speed-up build.
   # "-O0" causes segfaults in LLVM if we do not use "-DNDEBUG" as well.
