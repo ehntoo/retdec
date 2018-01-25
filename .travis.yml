@@ -44,11 +44,7 @@ matrix:
       osx_image: xcode8.3
       env:
         - MATRIX_EVAL="NPROC=$(sysctl -n hw.physicalcpu)"
-        #
-        - CMAKE_INCLUDE_PATH="/usr/local/opt/flex/include"
-        - CMAKE_LIBRARY_PATH="/usr/local/opt/flex/lib;/usr/local/opt/bison/lib"
-        - PATH="/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH"
-        - PATH="/usr/local/opt/ccache/libexec:$PATH"
+        - CCACHE_CPP2=true
 
 install:
   # We need to install newer versions of Flex and Bison on MacOS X.
@@ -59,17 +55,13 @@ install:
 before_script:
   - eval "${MATRIX_EVAL}"
   # We need to use newer versions of Flex and Bison on MacOS X (the ones from Homebrew).
-#  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then export CMAKE_INCLUDE_PATH="/usr/local/opt/flex/include"; fi
-#  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then export CMAKE_LIBRARY_PATH="/usr/local/opt/flex/lib;/usr/local/opt/bison/lib"; fi
-#  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then export PATH="/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH"; fi
-#  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then export PATH="/usr/local/opt/ccache/libexec:$PATH"; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then export CMAKE_INCLUDE_PATH="/usr/local/opt/flex/include"; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then export CMAKE_LIBRARY_PATH="/usr/local/opt/flex/lib;/usr/local/opt/bison/lib"; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then export PATH="/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH"; fi
+  # We need to add ccache before everything else in PATH.
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then export PATH="/usr/local/opt/ccache/libexec:$PATH"; fi
 
 script:
-  # Check if global
-  echo "=================> CMAKE_INCLUDE_PATH = $CMAKE_INCLUDE_PATH"
-  echo "=================> CMAKE_LIBRARY_PATH = $CMAKE_LIBRARY_PATH"
-  echo "=================> PATH               = $PATH"
-  #
   - mkdir build && cd build
   # We use "-O0" to speed-up build.
   # "-O0" causes segfaults in LLVM if we do not use "-DNDEBUG" as well.
