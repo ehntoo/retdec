@@ -52,7 +52,9 @@ install:
   # ccache is not installed on OS X.
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install ccache; fi
   # Contains sha256sum, readlink, etc.
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install coreutils gnu-getopt; fi
+  #- if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install coreutils; fi
+  #
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install gnu-getopt; fi
 
 before_script:
   - eval "${MATRIX_EVAL}"
@@ -63,7 +65,7 @@ before_script:
   # Coreutils.
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then export PATH="$(brew --prefix coreutils)/libexec/gnubin:$PATH"; fi
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then ln -s /usr/local/bin/greadlink /usr/local/bin/readlink; fi
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then export PATH="/usr/local/opt/gnu-getopt/bin/:$PATH"; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then export PATH="/usr/local/opt/gnu-getopt/bin:$PATH"; fi
   # We need to add ccache before everything else in PATH.
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then export PATH="/usr/local/opt/ccache/libexec:$PATH"; fi
 
