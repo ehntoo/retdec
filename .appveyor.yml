@@ -13,8 +13,6 @@ install:
   - appveyor DownloadFile "https://downloads.sourceforge.net/project/winflexbison/%WINFLEXBISON_ARCHIVE%"
   - 7z x -y -owinflexbison\ "%WINFLEXBISON_ARCHIVE%" > nul
   - set Path=%CD%\winflexbison;%Path%
-#  - C:\msys64\usr\bin\pacman --needed --noconfirm -S upx bc
-#  - set Path=C:\msys64\usr\bin;C:\msys64\mingw64\bin;%Path%
 
 before_build:
   - cmd: mkdir build
@@ -27,8 +25,21 @@ build_script:
   - cmd: cmake --build . --config Release --target install
 
 test_script:
-  - cmd: install\bin\retdec-tests-bin2llvmir.exe
-  - cmd: C:\msys64\usr\bin\bash.exe install\bin\retdec-tests-runner.sh
+  # Test that install is movable and that it does not need build directory.
+  - cmd: mv install ../retdec-install
+  - cmd: cd ..
+  - cmd: rm -rf build
+  # Run unit tests.
+  - cmd: C:\msys64\usr\bin\bash.exe retdec-install\bin\retdec-tests-runner.sh
+  # Run decompilation script.
+  - cmd: C:\msys64\usr\bin\bash.exe retdec-install\bin\retdec-decompiler.sh --help
+  # Run simple decompilation.
+  - cmd: echo -e '#include <stdio.h>\n#include <stdlib.h>\nint main()\n{\n  printf("hello world\\n");\n  return 0;\n}\n' > hello-orig.c
+  - cmd: cat hello-orig.c
+  - cmd: C:\msys64\usr\bin\gcc32 -o hello.exe hello-orig.c
+  - cmd: hello.exe
+  - cmd: C:\msys64\usr\bin\bash.exe retdec-install\bin\retdec-decompiler.sh hello.exe
+  - cmd: cat hello.c
 
 notifications:
   - provider: Email
