@@ -15,6 +15,10 @@ install:
   - set Path=%CD%\winflexbison;%Path%
 
 before_build:
+  - cmd: ls C:\msys\usr\bin | grep gcc
+  - cmd: ls C:\msys64\usr\bin | grep gcc
+  - cmd: gcc --version
+  #
   - cmd: mkdir build
   - cmd: cd build
   - cmd: cmake -DCMAKE_CXX_FLAGS_RELEASE="/Od -DNDEBUG" -G"%CMAKE_GENERATOR%" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="install" -DRETDEC_TESTS=ON -DRETDEC_DEV_TOOLS=ON ..
