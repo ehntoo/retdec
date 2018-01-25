@@ -21,6 +21,7 @@ before_build:
 
 build_script:
   - cmd: cmake --build . --config Release -- /m
+  # Get wget, etc. needd for install step. If we do this earlier, build step fails.
   - set Path=C:\msys64\usr\bin;C:\msys64\mingw64\bin;%Path%
   - cmd: cmake --build . --config Release --target install
 
