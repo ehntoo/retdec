@@ -23,11 +23,12 @@ before_build:
 
 build_script:
   - cmd: cmake --build . --config Release -- /m
-#  - cmd: cmake --build . --config Release --target install
+  - set Path=C:\msys64\usr\bin;C:\msys64\mingw64\bin;%Path%
+  - cmd: cmake --build . --config Release --target install
 
-#test_script:
-#  - cmd: install\bin\retdec-tests-bin2llvmir
-#  - cmd: bash install\bin\retdec-tests-runner.sh
+test_script:
+  - cmd: install\bin\retdec-tests-bin2llvmir
+  - cmd: bash install\bin\retdec-tests-runner.sh
 
 notifications:
   - provider: Email
