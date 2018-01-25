@@ -14,7 +14,7 @@ install:
   - 7z x -y -owinflexbison\ "%WINFLEXBISON_ARCHIVE%" > nul
   - set Path=%CD%\winflexbison;%Path%
 #  - C:\msys64\usr\bin\pacman --needed --noconfirm -S upx bc
-  - set Path=C:\msys64\usr\bin;C:\msys64\mingw64\bin;%Path%
+#  - set Path=C:\msys64\usr\bin;C:\msys64\mingw64\bin;%Path%
 
 before_build:
   - cmd: mkdir build
@@ -23,11 +23,11 @@ before_build:
 
 build_script:
   - cmd: cmake --build . --config Release -- /m
-  - cmd: cmake --build . --config Release --target install
+#  - cmd: cmake --build . --config Release --target install
 
-test_script:
-  - cmd: install\bin\retdec-tests-bin2llvmir
-  - cmd: bash install\bin\retdec-tests-runner.sh
+#test_script:
+#  - cmd: install\bin\retdec-tests-bin2llvmir
+#  - cmd: bash install\bin\retdec-tests-runner.sh
 
 notifications:
   - provider: Email
