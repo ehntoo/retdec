@@ -15,9 +15,14 @@ install:
   - set Path=%CD%\winflexbison;%Path%
 
 before_build:
-  - cmd: ls C:\msys\usr\bin | grep gcc
+  - cmd: ls C:\
   - cmd: ls C:\msys64\usr\bin | grep gcc
   - cmd: gcc --version
+  #
+  - cmd: C:\msys64\usr\bin\echo.exe -e "#include <stdio.h>\n#include <stdlib.h>\nint main()\n{\n  printf(\"hello world\\\n\");\n  return 0;\n}\n" > hello-orig.c
+  - cmd: cat hello-orig.c
+  - cmd: C:\msys64\usr\bin\gcc32 -o hello.exe hello-orig.c
+  - cmd: hello.exe
   #
   - cmd: mkdir build
   - cmd: cd build
