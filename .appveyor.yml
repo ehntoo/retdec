@@ -19,7 +19,7 @@ install:
 before_build:
   - cmd: mkdir build
   - cmd: cd build
-  - cmd: cmake -DCMAKE_CXX_FLAGS_RELEASE="/Od -DNDEBUG" -G"%CMAKE_GENERATOR%" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="%APPVEYOR_BUILD_FOLDER%\install" ..
+  - cmd: cmake -DCMAKE_CXX_FLAGS_RELEASE="/Od -DNDEBUG" -G"%CMAKE_GENERATOR%" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="%APPVEYOR_BUILD_FOLDER%\install" -DRETDEC_TESTS=ON -DRETDEC_DEV_TOOLS=ON ..
 
 build_script:
   - cmd: cmake --build . --config Release -- /m
@@ -27,8 +27,8 @@ build_script:
   - cmd: cmake --build . --config Release --target install
 
 test_script:
-  - cmd: install\bin\retdec-tests-bin2llvmir
-  - cmd: bash install\bin\retdec-tests-runner.sh
+  - cmd: install\bin\retdec-tests-bin2llvmir.exe
+  - cmd: C:\msys64\usr\bin\bash.exe install\bin\retdec-tests-runner.sh
 
 notifications:
   - provider: Email
